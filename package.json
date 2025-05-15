@@ -1,0 +1,16 @@
+{
+  "name": "ol-valtio-poc",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "npx parcel serve index.html",
+    "build": "npx parcel build index.html"
+  },
+  "author": "Someware",
+  "license": "MIT",
+  "devDependencies": {
+    "ol": "^10.5.0",
+    "parcel": "^2.15.0",
+    "valtio": "^2.1.5"
+  }
+}

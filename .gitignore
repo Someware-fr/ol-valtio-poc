@@ -1,0 +1,12 @@
+.DS_Store
+.esm-cache
+.vscode/
+.idea/
+.env
+
+/README.html
+
+/node_modules/
+.parcel-cache
+/dist
+
