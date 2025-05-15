@@ -19,3 +19,11 @@ npm run start
 
 Then open <http:://localhost:1234> in your web browser
 
+
+Deploy to GitHub Pages
+----------------------
+
+```
+npm run deploy
+```
+
