@@ -1,9 +1,9 @@
 import 'ol/ol.css';
 
 import initMap from './map';
-import { zoomInControl, zoomOutControl, displayZoomControl } from './zoom';
-import { setCenterToMyPlaceControl, displayCenterControl } from './center';
-import { layersControl } from './layers';
+import { zoomInControl, zoomOutControl, displayZoomControl } from './controls/zoom';
+import { setCenterToMyPlaceControl, displayCenterControl } from './controls/center';
+import { layersControl } from './controls/layers';
 
 initMap(document.getElementById('map'));
 

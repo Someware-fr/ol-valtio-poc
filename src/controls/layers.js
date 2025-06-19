@@ -1,4 +1,4 @@
-import { state, subscribe } from './state';
+import { state, subscribe } from '../state';
 
 
 

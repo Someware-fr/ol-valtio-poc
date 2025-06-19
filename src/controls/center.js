@@ -1,4 +1,4 @@
-import { state, subscribeKey } from './state';
+import { state, subscribeKey } from '../state';
 
 
 const MY_PLACE = {
