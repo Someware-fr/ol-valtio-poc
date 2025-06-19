@@ -671,9 +671,9 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _olCss = require("ol/ol.css");
 var _map = require("./map");
 var _mapDefault = parcelHelpers.interopDefault(_map);
-var _zoom = require("./zoom");
-var _center = require("./center");
-var _layers = require("./layers");
+var _zoom = require("./controls/zoom");
+var _center = require("./controls/center");
+var _layers = require("./controls/layers");
 (0, _mapDefault.default)(document.getElementById('map'));
 (0, _zoom.zoomInControl)(document.getElementById('zoom-in'));
 (0, _zoom.zoomOutControl)(document.getElementById('zoom-out'));
@@ -682,7 +682,7 @@ var _layers = require("./layers");
 (0, _center.displayCenterControl)(document.getElementById('display-center'));
 (0, _layers.layersControl)(document.getElementById('layers'));
 
-},{"ol/ol.css":"2wn4y","./map":"cb1CS","./zoom":"eBheK","./center":"j3Dds","./layers":"1rMpU","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2wn4y":[function() {},{}],"cb1CS":[function(require,module,exports,__globalThis) {
+},{"ol/ol.css":"2wn4y","./map":"cb1CS","./controls/zoom":"d12hE","./controls/center":"626ZJ","./controls/layers":"hn52W","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2wn4y":[function() {},{}],"cb1CS":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>initMap);
@@ -28435,13 +28435,13 @@ exports.proxySet = proxySet;
 exports.subscribeKey = subscribeKey;
 exports.watch = watch;
 
-},{"5f72634c2334d160":"1lH0Z"}],"eBheK":[function(require,module,exports,__globalThis) {
+},{"5f72634c2334d160":"1lH0Z"}],"d12hE":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "displayZoomControl", ()=>displayZoomControl);
 parcelHelpers.export(exports, "zoomInControl", ()=>zoomInControl);
 parcelHelpers.export(exports, "zoomOutControl", ()=>zoomOutControl);
-var _state = require("./state");
+var _state = require("../state");
 function displayZoomControl(target) {
     const display = (zoom)=>target.textContent = JSON.stringify(zoom);
     (0, _state.subscribeKey)((0, _state.state).map, 'zoom', display);
@@ -28457,12 +28457,12 @@ function zoomByDelta(delta) {
     (0, _state.state).map.zoom = (0, _state.state).map.zoom + delta;
 }
 
-},{"./state":"lzhTf","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"j3Dds":[function(require,module,exports,__globalThis) {
+},{"../state":"lzhTf","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"626ZJ":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "displayCenterControl", ()=>displayCenterControl);
 parcelHelpers.export(exports, "setCenterToMyPlaceControl", ()=>setCenterToMyPlaceControl);
-var _state = require("./state");
+var _state = require("../state");
 const MY_PLACE = {
     zoom: 19,
     center: [
@@ -28482,11 +28482,11 @@ function setCenterToMyPlaceControl(target) {
     });
 }
 
-},{"./state":"lzhTf","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"1rMpU":[function(require,module,exports,__globalThis) {
+},{"../state":"lzhTf","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"hn52W":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "layersControl", ()=>layersControl);
-var _state = require("./state");
+var _state = require("../state");
 function layersControl(target) {
     (0, _state.state).layers.forEach((config)=>{
         createLayerRow(target, config);
@@ -28529,6 +28529,6 @@ function syncState(target, stateLayers) {
     });
 }
 
-},{"./state":"lzhTf","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5j6Kf","a0t4e"], "a0t4e", "parcelRequire6b08", {})
+},{"../state":"lzhTf","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5j6Kf","a0t4e"], "a0t4e", "parcelRequire6b08", {})
 
 //# sourceMappingURL=valtio-poc.31b563d9.js.map
