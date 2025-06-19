@@ -2,8 +2,13 @@ Openlayer with Valtio POC
 =========================
 
 Dummy demo app to control an [Openlayers](https://openlayers.org/) map
-zoom and center with a [Valtio](https://valtio.dev/) state,
-in plain javascript.
+with  a [Valtio](https://valtio.dev/) state, in plain javascript.
+
+Existing controls:
+
+- Zoom
+- Center
+- Layers
 
 
 Develop
