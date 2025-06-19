@@ -680,7 +680,7 @@ var _layers = require("./layers");
 (0, _center.setCenterToMyPlaceControl)(document.getElementById('center-to-my-place'));
 (0, _zoom.displayZoomControl)(document.getElementById('display-zoom'));
 (0, _center.displayCenterControl)(document.getElementById('display-center'));
-(0, _layers.displayLayersControl)(document.getElementById('layers'));
+(0, _layers.layersControl)(document.getElementById('layers'));
 
 },{"ol/ol.css":"2wn4y","./map":"cb1CS","./zoom":"eBheK","./center":"j3Dds","./layers":"1rMpU","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2wn4y":[function() {},{}],"cb1CS":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -28485,9 +28485,9 @@ function setCenterToMyPlaceControl(target) {
 },{"./state":"lzhTf","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"1rMpU":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "displayLayersControl", ()=>displayLayersControl);
+parcelHelpers.export(exports, "layersControl", ()=>layersControl);
 var _state = require("./state");
-function displayLayersControl(target) {
+function layersControl(target) {
     (0, _state.state).layers.forEach((config)=>{
         createLayerRow(target, config);
     });
