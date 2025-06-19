@@ -2,7 +2,7 @@ import { state, subscribe } from './state';
 
 
 
-export function displayLayersControl(target) {
+export function layersControl(target) {
   state.layers.forEach((config) => {
     createLayerRow(target, config);
   });
