@@ -1,24 +1,36 @@
 import Map from 'ol/Map.js';
 import View from 'ol/View.js';
+
+import baseLayers from './baseLayers';
+import { state, subscribeKey, subscribe, snapshot } from './state';
+
 import TileLayer from 'ol/layer/Tile.js';
 import OSM from 'ol/source/OSM.js';
 
-import { state, subscribeKey, subscribe, snapshot } from './state';
+function syncLayers(stateLayers, olLayers) {
+  stateLayers.forEach((config) => {
+    const olLayer = baseLayers[config.key];
+    if (olLayer) {
+      olLayer.setVisible(config.visible ?? true);
+      olLayer.setOpacity(config.opacity ?? 1);
+    }
+  });
+}
 
 export default function initMap(target) {
 
   const map = new Map({
-    layers: [
-      new TileLayer({
-        source: new OSM(),
-      }),
-    ],
-    target,
+    layers: state.layers.map((config) => (
+      baseLayers[config.key]
+    )).filter((olLayer) => !!olLayer),
     view: new View({
-      center: [0, 0],
+      center: state.map.center,
       zoom: state.map.zoom,
     }),
+    target,
   });
+
+  syncLayers(state.layers, baseLayers);
 
   const view = map.getView();
 
@@ -42,6 +54,10 @@ export default function initMap(target) {
         duration: 250,
       });
     }
+  });
+
+  subscribe(state.layers, () => {
+    syncLayers(state.layers, baseLayers);
   });
 }
 
