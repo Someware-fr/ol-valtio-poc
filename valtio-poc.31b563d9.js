@@ -160,11 +160,11 @@
       });
     }
   }
-})({"19SAD":[function(require,module,exports,__globalThis) {
+})({"5j6Kf":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
-var HMR_SERVER_PORT = 33363;
+var HMR_SERVER_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
@@ -673,14 +673,16 @@ var _map = require("./map");
 var _mapDefault = parcelHelpers.interopDefault(_map);
 var _zoom = require("./zoom");
 var _center = require("./center");
+var _layers = require("./layers");
 (0, _mapDefault.default)(document.getElementById('map'));
 (0, _zoom.zoomInControl)(document.getElementById('zoom-in'));
 (0, _zoom.zoomOutControl)(document.getElementById('zoom-out'));
 (0, _center.setCenterToMyPlaceControl)(document.getElementById('center-to-my-place'));
 (0, _zoom.displayZoomControl)(document.getElementById('display-zoom'));
 (0, _center.displayCenterControl)(document.getElementById('display-center'));
+(0, _layers.displayLayersControl)(document.getElementById('layers'));
 
-},{"ol/ol.css":"2wn4y","./map":"cb1CS","./zoom":"eBheK","./center":"j3Dds","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2wn4y":[function() {},{}],"cb1CS":[function(require,module,exports,__globalThis) {
+},{"ol/ol.css":"2wn4y","./map":"cb1CS","./zoom":"eBheK","./center":"j3Dds","./layers":"1rMpU","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2wn4y":[function() {},{}],"cb1CS":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>initMap);
@@ -688,27 +690,32 @@ var _mapJs = require("ol/Map.js");
 var _mapJsDefault = parcelHelpers.interopDefault(_mapJs);
 var _viewJs = require("ol/View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _baseLayers = require("./baseLayers");
+var _baseLayersDefault = parcelHelpers.interopDefault(_baseLayers);
+var _state = require("./state");
 var _tileJs = require("ol/layer/Tile.js");
 var _tileJsDefault = parcelHelpers.interopDefault(_tileJs);
 var _osmJs = require("ol/source/OSM.js");
 var _osmJsDefault = parcelHelpers.interopDefault(_osmJs);
-var _state = require("./state");
+function syncLayers(stateLayers, olLayers) {
+    stateLayers.forEach((config)=>{
+        const olLayer = (0, _baseLayersDefault.default)[config.key];
+        if (olLayer) {
+            olLayer.setVisible(config.visible ?? true);
+            olLayer.setOpacity(config.opacity ?? 1);
+        }
+    });
+}
 function initMap(target) {
     const map = new (0, _mapJsDefault.default)({
-        layers: [
-            new (0, _tileJsDefault.default)({
-                source: new (0, _osmJsDefault.default)()
-            })
-        ],
-        target,
+        layers: (0, _state.state).layers.map((config)=>(0, _baseLayersDefault.default)[config.key]).filter((olLayer)=>!!olLayer),
         view: new (0, _viewJsDefault.default)({
-            center: [
-                0,
-                0
-            ],
+            center: (0, _state.state).map.center,
             zoom: (0, _state.state).map.zoom
-        })
+        }),
+        target
     });
+    syncLayers((0, _state.state).layers, (0, _baseLayersDefault.default));
     const view = map.getView();
     view.on('change:resolution', ()=>{
         (0, _state.state).map.zoom = view.getZoom();
@@ -727,9 +734,12 @@ function initMap(target) {
             });
         }
     });
+    (0, _state.subscribe)((0, _state.state).layers, ()=>{
+        syncLayers((0, _state.state).layers, (0, _baseLayersDefault.default));
+    });
 }
 
-},{"ol/Map.js":"fTPcq","ol/View.js":"fJPFQ","ol/layer/Tile.js":"8sJWw","ol/source/OSM.js":"90vGx","./state":"lzhTf","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fTPcq":[function(require,module,exports,__globalThis) {
+},{"ol/Map.js":"fTPcq","ol/View.js":"fJPFQ","./baseLayers":"bK35A","./state":"lzhTf","ol/layer/Tile.js":"8sJWw","ol/source/OSM.js":"90vGx","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fTPcq":[function(require,module,exports,__globalThis) {
 /**
  * @module ol/Map
  */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -22394,7 +22404,32 @@ var _utilJs = require("../util.js");
 }
 exports.default = MapRenderer;
 
-},{"../Disposable.js":"7pfJR","../coordinate.js":"fqHXJ","../extent.js":"bGUel","../functions.js":"1QSsQ","../layer/Layer.js":"ixGac","../style/IconImageCache.js":"aj9Mo","../transform.js":"9LrRk","../util.js":"l1iPW","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"8sJWw":[function(require,module,exports,__globalThis) {
+},{"../Disposable.js":"7pfJR","../coordinate.js":"fqHXJ","../extent.js":"bGUel","../functions.js":"1QSsQ","../layer/Layer.js":"ixGac","../style/IconImageCache.js":"aj9Mo","../transform.js":"9LrRk","../util.js":"l1iPW","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bK35A":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _tileJs = require("ol/layer/Tile.js");
+var _tileJsDefault = parcelHelpers.interopDefault(_tileJs);
+var _xyzJs = require("ol/source/XYZ.js");
+var _xyzJsDefault = parcelHelpers.interopDefault(_xyzJs);
+var _osmJs = require("ol/source/OSM.js");
+var _osmJsDefault = parcelHelpers.interopDefault(_osmJs);
+exports.default = {
+    osm: new (0, _tileJsDefault.default)({
+        source: new (0, _osmJsDefault.default)()
+    }),
+    plan_ign: new (0, _tileJsDefault.default)({
+        source: new (0, _xyzJsDefault.default)({
+            url: 'https://data.geopf.fr/wmts?&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&STYLE=normal&TILEMATRIX={z}&TILEMATRIXSET=PM&TILEROW={y}&TILECOL={x}&FORMAT=image/png&TRANSPARENT=true'
+        })
+    }),
+    ortho: new (0, _tileJsDefault.default)({
+        source: new (0, _xyzJsDefault.default)({
+            url: 'https://data.geopf.fr/wmts?&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=HR.ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIX={z}&TILEMATRIXSET=PM&TILEROW={y}&TILECOL={x}&FORMAT=image/jpeg&TRANSPARENT=true'
+        })
+    })
+};
+
+},{"ol/layer/Tile.js":"8sJWw","ol/source/XYZ.js":"15CIn","ol/source/OSM.js":"90vGx","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"8sJWw":[function(require,module,exports,__globalThis) {
 /**
  * @module ol/layer/Tile
  */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -25617,76 +25652,7 @@ exports.default = {
     USE_INTERIM_TILES_ON_ERROR: 'useInterimTilesOnError'
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"90vGx":[function(require,module,exports,__globalThis) {
-/**
- * @module ol/source/OSM
- */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "ATTRIBUTION", ()=>ATTRIBUTION);
-var _xyzJs = require("./XYZ.js");
-var _xyzJsDefault = parcelHelpers.interopDefault(_xyzJs);
-const ATTRIBUTION = '&#169; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors.';
-/**
- * @typedef {Object} Options
- * @property {import("./Source.js").AttributionLike} [attributions] Attributions.
- * @property {number} [cacheSize] Deprecated.  Use the cacheSize option on the layer instead.
- * @property {null|string} [crossOrigin='anonymous'] The `crossOrigin` attribute for loaded images.  Note that
- * you must provide a `crossOrigin` value if you want to access pixel data with the Canvas renderer.
- * See https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image for more detail.
- * @property {boolean} [interpolate=true] Use interpolated values when resampling.  By default,
- * linear interpolation is used when resampling.  Set to false to use the nearest neighbor instead.
- * @property {number} [maxZoom=19] Max zoom.
- * @property {number} [reprojectionErrorThreshold=0.5] Maximum allowed reprojection error (in pixels).
- * Higher values can increase reprojection performance, but decrease precision.
- * @property {import("../Tile.js").LoadFunction} [tileLoadFunction] Optional function to load a tile given a URL. The default is
- * ```js
- * function(imageTile, src) {
- *   imageTile.getImage().src = src;
- * };
- * ```
- * @property {number} [transition=250] Duration of the opacity transition for rendering.
- * To disable the opacity transition, pass `transition: 0`.
- * @property {string} [url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'] URL template.
- * Must include `{x}`, `{y}` or `{-y}`, and `{z}` placeholders.
- * @property {boolean} [wrapX=true] Whether to wrap the world horizontally.
- * @property {number|import("../array.js").NearestDirectionFunction} [zDirection=0]
- * Choose whether to use tiles with a higher or lower zoom level when between integer
- * zoom levels. See {@link module:ol/tilegrid/TileGrid~TileGrid#getZForResolution}.
- */ /**
- * @classdesc
- * Layer source for the OpenStreetMap tile server.
- * @api
- */ class OSM extends (0, _xyzJsDefault.default) {
-    /**
-   * @param {Options} [options] Open Street Map options.
-   */ constructor(options){
-        options = options || {};
-        let attributions;
-        if (options.attributions !== undefined) attributions = options.attributions;
-        else attributions = [
-            ATTRIBUTION
-        ];
-        const crossOrigin = options.crossOrigin !== undefined ? options.crossOrigin : 'anonymous';
-        const url = options.url !== undefined ? options.url : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-        super({
-            attributions: attributions,
-            attributionsCollapsible: false,
-            cacheSize: options.cacheSize,
-            crossOrigin: crossOrigin,
-            interpolate: options.interpolate,
-            maxZoom: options.maxZoom !== undefined ? options.maxZoom : 19,
-            reprojectionErrorThreshold: options.reprojectionErrorThreshold,
-            tileLoadFunction: options.tileLoadFunction,
-            transition: options.transition,
-            url: url,
-            wrapX: options.wrapX,
-            zDirection: options.zDirection
-        });
-    }
-}
-exports.default = OSM;
-
-},{"./XYZ.js":"15CIn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"15CIn":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"15CIn":[function(require,module,exports,__globalThis) {
 /**
  * @module ol/source/XYZ
  */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -27413,7 +27379,76 @@ exports.default = {
  * @typedef {'tileloadstart'|'tileloadend'|'tileloaderror'} TileSourceEventTypes
  */ 
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"lzhTf":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"90vGx":[function(require,module,exports,__globalThis) {
+/**
+ * @module ol/source/OSM
+ */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "ATTRIBUTION", ()=>ATTRIBUTION);
+var _xyzJs = require("./XYZ.js");
+var _xyzJsDefault = parcelHelpers.interopDefault(_xyzJs);
+const ATTRIBUTION = '&#169; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors.';
+/**
+ * @typedef {Object} Options
+ * @property {import("./Source.js").AttributionLike} [attributions] Attributions.
+ * @property {number} [cacheSize] Deprecated.  Use the cacheSize option on the layer instead.
+ * @property {null|string} [crossOrigin='anonymous'] The `crossOrigin` attribute for loaded images.  Note that
+ * you must provide a `crossOrigin` value if you want to access pixel data with the Canvas renderer.
+ * See https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image for more detail.
+ * @property {boolean} [interpolate=true] Use interpolated values when resampling.  By default,
+ * linear interpolation is used when resampling.  Set to false to use the nearest neighbor instead.
+ * @property {number} [maxZoom=19] Max zoom.
+ * @property {number} [reprojectionErrorThreshold=0.5] Maximum allowed reprojection error (in pixels).
+ * Higher values can increase reprojection performance, but decrease precision.
+ * @property {import("../Tile.js").LoadFunction} [tileLoadFunction] Optional function to load a tile given a URL. The default is
+ * ```js
+ * function(imageTile, src) {
+ *   imageTile.getImage().src = src;
+ * };
+ * ```
+ * @property {number} [transition=250] Duration of the opacity transition for rendering.
+ * To disable the opacity transition, pass `transition: 0`.
+ * @property {string} [url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'] URL template.
+ * Must include `{x}`, `{y}` or `{-y}`, and `{z}` placeholders.
+ * @property {boolean} [wrapX=true] Whether to wrap the world horizontally.
+ * @property {number|import("../array.js").NearestDirectionFunction} [zDirection=0]
+ * Choose whether to use tiles with a higher or lower zoom level when between integer
+ * zoom levels. See {@link module:ol/tilegrid/TileGrid~TileGrid#getZForResolution}.
+ */ /**
+ * @classdesc
+ * Layer source for the OpenStreetMap tile server.
+ * @api
+ */ class OSM extends (0, _xyzJsDefault.default) {
+    /**
+   * @param {Options} [options] Open Street Map options.
+   */ constructor(options){
+        options = options || {};
+        let attributions;
+        if (options.attributions !== undefined) attributions = options.attributions;
+        else attributions = [
+            ATTRIBUTION
+        ];
+        const crossOrigin = options.crossOrigin !== undefined ? options.crossOrigin : 'anonymous';
+        const url = options.url !== undefined ? options.url : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+        super({
+            attributions: attributions,
+            attributionsCollapsible: false,
+            cacheSize: options.cacheSize,
+            crossOrigin: crossOrigin,
+            interpolate: options.interpolate,
+            maxZoom: options.maxZoom !== undefined ? options.maxZoom : 19,
+            reprojectionErrorThreshold: options.reprojectionErrorThreshold,
+            tileLoadFunction: options.tileLoadFunction,
+            transition: options.transition,
+            url: url,
+            wrapX: options.wrapX,
+            zDirection: options.zDirection
+        });
+    }
+}
+exports.default = OSM;
+
+},{"./XYZ.js":"15CIn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"lzhTf":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
@@ -27429,7 +27464,25 @@ const state = (0, _vanilla.proxy)({
             0,
             0
         ]
-    }
+    },
+    layers: [
+        {
+            name: 'OpenStreetMap',
+            key: 'osm',
+            visible: true
+        },
+        {
+            name: 'Plan IGN',
+            key: 'plan_ign',
+            visible: false
+        },
+        {
+            name: 'Ortho IGN',
+            key: 'ortho',
+            visible: false,
+            opacity: 0.5
+        }
+    ]
 });
 
 },{"valtio/vanilla":"1lH0Z","valtio/vanilla/utils":"bDbVn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"1lH0Z":[function(require,module,exports,__globalThis) {
@@ -28429,6 +28482,53 @@ function setCenterToMyPlaceControl(target) {
     });
 }
 
-},{"./state":"lzhTf","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["19SAD","a0t4e"], "a0t4e", "parcelRequire6b08", {})
+},{"./state":"lzhTf","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"1rMpU":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "displayLayersControl", ()=>displayLayersControl);
+var _state = require("./state");
+function displayLayersControl(target) {
+    (0, _state.state).layers.forEach((config)=>{
+        createLayerRow(target, config);
+    });
+    syncState(target, (0, _state.state).layers);
+    (0, _state.subscribe)((0, _state.state).layers, ()=>{
+        syncState(target, (0, _state.state).layers);
+    });
+}
+function createLayerRow(target, config) {
+    const row = document.createElement('li');
+    const label = document.createElement('label');
+    label.appendChild(document.createTextNode(config.name));
+    const visibilityCheck = document.createElement('input');
+    visibilityCheck.type = "checkbox";
+    visibilityCheck.name = `layer-${config.key}-visible`;
+    visibilityCheck.checked = config.visible ?? true;
+    visibilityCheck.addEventListener('change', (evt)=>{
+        config.visible = evt.target.checked;
+    });
+    label.appendChild(visibilityCheck);
+    row.appendChild(label);
+    const opacityInput = document.createElement('input');
+    opacityInput.type = 'range';
+    opacityInput.name = `layer-${config.key}-opacity`;
+    opacityInput.min = 0;
+    opacityInput.max = 1;
+    opacityInput.step = 0.1;
+    opacityInput.value = config.opacity ?? 1;
+    opacityInput.addEventListener('input', (evt)=>{
+        config.opacity = Number(evt.target.value);
+    });
+    row.appendChild(opacityInput);
+    target.appendChild(row);
+}
+function syncState(target, stateLayers) {
+    stateLayers.forEach((config)=>{
+        const opacityInput = document.getElementsByName(`layer-${config.key}-opacity`)[0];
+        if (opacityInput) opacityInput.disabled = !(config.visible ?? true);
+    });
+}
+
+},{"./state":"lzhTf","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5j6Kf","a0t4e"], "a0t4e", "parcelRequire6b08", {})
 
 //# sourceMappingURL=valtio-poc.31b563d9.js.map
