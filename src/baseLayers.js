@@ -12,11 +12,13 @@ export default {
   plan_ign: new TileLayer({
     source: new XYZ({
       url: 'https://data.geopf.fr/wmts?&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&STYLE=normal&TILEMATRIX={z}&TILEMATRIXSET=PM&TILEROW={y}&TILECOL={x}&FORMAT=image/png&TRANSPARENT=true',
+      attributions: '© IGN',
     }),
   }),
   ortho: new TileLayer({
     source: new XYZ({
       url: 'https://data.geopf.fr/wmts?&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=HR.ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIX={z}&TILEMATRIXSET=PM&TILEROW={y}&TILECOL={x}&FORMAT=image/jpeg&TRANSPARENT=true',
+      attributions: '© IGN',
     }),
   }),
 };
