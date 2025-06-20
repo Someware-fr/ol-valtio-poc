@@ -22419,12 +22419,14 @@ exports.default = {
     }),
     plan_ign: new (0, _tileJsDefault.default)({
         source: new (0, _xyzJsDefault.default)({
-            url: 'https://data.geopf.fr/wmts?&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&STYLE=normal&TILEMATRIX={z}&TILEMATRIXSET=PM&TILEROW={y}&TILECOL={x}&FORMAT=image/png&TRANSPARENT=true'
+            url: 'https://data.geopf.fr/wmts?&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&STYLE=normal&TILEMATRIX={z}&TILEMATRIXSET=PM&TILEROW={y}&TILECOL={x}&FORMAT=image/png&TRANSPARENT=true',
+            attributions: "\xa9 IGN"
         })
     }),
     ortho: new (0, _tileJsDefault.default)({
         source: new (0, _xyzJsDefault.default)({
-            url: 'https://data.geopf.fr/wmts?&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=HR.ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIX={z}&TILEMATRIXSET=PM&TILEROW={y}&TILECOL={x}&FORMAT=image/jpeg&TRANSPARENT=true'
+            url: 'https://data.geopf.fr/wmts?&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=HR.ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&TILEMATRIX={z}&TILEMATRIXSET=PM&TILEROW={y}&TILECOL={x}&FORMAT=image/jpeg&TRANSPARENT=true',
+            attributions: "\xa9 IGN"
         })
     })
 };
